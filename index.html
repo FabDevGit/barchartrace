@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bar chart generator</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div id="app" class="jumbotron">
+    <h2 class="display-4">Bar chart race generator</h2>
+    <form @submit="checkForm">
+
+      <p v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+      </p>
+
+      <p>
+        <label for="file-input">File input</label>
+
+        <input id="file-input"
+               @change="loadFile"
+               type="file"
+               accept=".csv, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">,
+      </p>
+
+      <p>
+        <label for="duration">Animation duration (in s)</label>
+        <input id="duration"
+               v-model="duration"
+               type="number"
+               name="duration"
+               min="0">
+      </p>
+      <p>
+        <label for="top_n">Number of bars to display</label>
+        <input id="top_n"
+               v-model="top_n"
+               type="number"
+               name="top_n"
+               min="0">
+      </p>
+
+      <p>
+        <label for="title">Title</label>
+        <input id="title"
+               v-model="title"
+               type="text"
+               name="title">
+      </p>
+
+      <p>
+        <input
+                type="submit"
+                value="Generate Bar Chart Race"
+        >
+      </p>
+
+    </form>
+    <p v-if="interval !== null">
+      <button v-on:click="interval.stop()">Stop</button>
+      <button v-on:click="checkForm">Restart</button>
+    </p>
+    <h3 id="graph-title"></h3>
+    <div id="chartDiv" style="width: 100%; height: 650px">
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+  <script src="index.js"></script>
+  <script>
+      const app = new Vue({
+          el: '#app',
+          data: {
+              errors: [],
+              file: null,
+              csv_data: null,
+              interval: null,
+              duration: 20,
+              tickDuration: 500,
+              top_n: 10,
+              title: "",
+          },
+          methods: {
+              loadFile: function (e) {
+                  var self = this;
+                  this.file = e.target.files[0];
+                  Papa.parse(self.file, {
+                      header: true,
+                      skipEmptyLines: true,
+                      complete: function (results) {
+                          if (Object.keys(results.data[0]).length === 3) {
+                              results.data = reshapeData(results.data)
+                          }
+                          console.log('load', results.data);
+                          self.csv_data = results.data;
+                          self.top_n = Object.keys(self.csv_data[0]).length - 1
+                      }
+                  });
+
+
+              },
+              checkForm: function (e) {
+                  var self = this;
+                  if (self.interval !== null) {
+                      self.interval.stop()
+                  }
+                  console.log(this.csv_data);
+                  if (self.tickDuration && self.top_n) {
+                      e.preventDefault();
+                      this.top_n = parseInt(self.top_n);
+                      this.duration = parseInt(self.duration);
+                      this.tickDuration = self.duration / self.csv_data.length * 1000
+                      let chartDiv = document.getElementById("chartDiv");
+                      document.getElementById('graph-title').innerHTML = self.title;
+                      var data = JSON.parse(JSON.stringify(self.csv_data))
+                      self.interval = createBarChartRace(data, self.top_n, self.tickDuration);
+
+
+                  }
+
+                  self.errors = [];
+
+                  if (!self.file) {
+                      self.errors.push('csv file is required');
+                  }
+                  if (!self.tickDuration) {
+                      self.errors.push('Time between frames required.');
+                  }
+                  if (!self.top_n) {
+                      self.errors.push('Number of bars to display required.');
+                  }
+
+                  e.preventDefault();
+              }
+          }
+      })
+
+      function reshapeData(data) {
+          // groupby dates (first column)
+          column_names = new Set(data.map(x=>x[Object.keys(x)[1]]))
+          console.log('to reshape ', data)
+          const grouped_by_date = _.groupBy(data, (e) => e[Object.keys(e)[0]]);
+          console.log(grouped_by_date);
+          return Object.keys(grouped_by_date).sort().map((k) => {
+              item = {'date': k};
+              column_names.forEach((n) => item[n]=0)
+              grouped_by_date[k].forEach((e) => item[e[Object.keys(e)[1]]] = e[Object.keys(e)[2]]);
+              console.log('line')
+              return item
+          })
+
+      }
+
+  </script>
+</body>
+</html>
