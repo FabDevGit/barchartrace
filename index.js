@@ -54,7 +54,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         const parseTime = d3.timeParse("%Y-%m-%d");
         d[time_index] = parseTime(d[time_index]);
         // convert other columns to numbers
-        column_names.forEach((k) => d[k] = 100 * Number(d[k]))
+        column_names.forEach((k) => d[k] = Number(d[k]))
 
     });
 
