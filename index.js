@@ -241,9 +241,9 @@ function createBarChartRace(data, top_n, tickDuration) {
             .attr('x', d => x(d.value) + 5)
             .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1)
             .tween("text", function (d) {
-                let i = d3.interpolateRound(d.lastValue, d.value);
+                let i = d3.interpolateNumber(d.lastValue, d.value);
                 return function (t) {
-                    this.textContent = d3.format(',')(i(t));
+                    this.textContent = d3.format(',.0f')(i(t));
                 };
             });
 
