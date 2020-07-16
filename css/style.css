@@ -1,0 +1,133 @@
+@font-face {
+  font-family: "Open Sans";
+  src: url("./Open_Sans/OpenSans-Light.ttf");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("./Open_Sans/OpenSans-SemiBold.ttf");
+  font-weight: bold;
+}
+
+body {
+    font-family: "Open Sans",sans-serif;
+    font-size: .9375rem;
+    font-weight: 300;
+    line-height: 1.9;
+}
+
+#main-title {
+    font-size: 3rem;
+    font-weight: 200;
+    line-height: 1.5;
+}
+
+label {
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: .5px;
+    margin-bottom: 4px;
+}
+
+.btn-outline-primary.disabled, .btn-outline-primary:disabled {
+    color: #50a1ff;
+    background-color: transparent;
+}
+
+.btn {
+    font-size: 11px;
+    padding: 8px 26px 6px;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    outline: none;
+    -webkit-transition: 0.15s linear;
+    transition: 0.15s linear;
+}
+
+text {
+    font-size: 16px;
+}
+
+text.valueLabel {
+    font-weight: 300;
+    fill: #505050;
+    dominant-baseline: middle;
+}
+
+text.timeText {
+    font-size: 20px;
+    font-weight: 700;
+    fill: #505050;
+}
+
+.xAxis > .tick line {
+    shape-rendering: CrispEdges;
+    stroke: #cecece;
+}
+
+.xAxis > .tick line.origin {
+    stroke: #aaaaaa;
+}
+
+.tick text {
+    fill: #6f6f6f;
+}
+
+.progressBar {
+    fill: #505050;
+}
+
+.tAxis > .tick line {
+    shape-rendering: CrispEdges;
+    stroke: #aaaaaa;
+}
+
+.xAxis > path.domain {
+    display: none;
+}
+
+.tAxis > path.domain {
+    color: #aaaaaa;
+}
+
+text.label {
+    font-weight: 600;
+    fill: #202020;
+    dominant-baseline: middle;
+
+}
+
+.xAxis .tick:nth-child(2) text {
+    text-anchor: start;
+}
+
+
+
+.section {
+    background: #f3f4f4;
+    position: relative;
+    border-bottom: none;
+    background-position: center center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(2.53125rem + 2px);
+    padding: .375rem .75rem;
+    font-size: .9375rem;
+    line-height: 1.9;
+    color: #999;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #eaeff4;
+    border-radius: 2px;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}

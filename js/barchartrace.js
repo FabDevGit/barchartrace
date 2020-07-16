@@ -66,9 +66,10 @@ function createBarChartRace(data, top_n, tickDuration) {
 
     let t = d3.scaleTime()
         .domain([start_date, end_date])
-        .range([margin.left, width - margin.right]);
+        .range([margin.left+30, width - margin.right]);
 
     let timeAxis = d3.axisBottom()
+        .ticks(5)
         .scale(t)
 
     let x = d3.scaleLinear()
