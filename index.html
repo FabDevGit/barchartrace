@@ -16,7 +16,8 @@
   Fabdev est une entreprise spécialisée dans le développement de plateformes, d'API, d'algorithmes et
   d'analyses de données en Python/Javascript.">
   <meta name="keywords" content="Bar chart race generator">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="/static/assets/img/favicon.png">
   <script>
@@ -63,7 +64,12 @@
                   <label for="customFile">CSV file</label>
                   <div class="custom-file">
                     <input type="file" class="custom-file-input" id="customFile" @change="loadFile"
-                           accept=".csv, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                           accept=".csv, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                           aria-describedby="passwordHelpBlock">
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                      <a href="#myModal" data-toggle="modal">show accepted csv formats</a>
+                    </small>
+
                     <label class="custom-file-label" for="customFile" ref="filelabel">((fileplaceholder))</label>
                   </div>
                 </div>
@@ -85,7 +91,7 @@
                 </div>
               </form>
             </div>
-            <div class="col-lg-6 border-left d-none d-lg-block">
+            <div class="col-lg-6 border-left d-lg-block">
               <label for="">Example files</label>
               <table class="table table-bordered">
                 <tbody>
@@ -106,7 +112,7 @@
                 <tr>
                   <td>CO2 Emissions per country</td>
                   <td><a href="" @click.prevent="loadExample('co2')">load data</a></td>
-                  <td><a href="datasets/tennis.csv">Download</a></td>
+                  <td><a href="datasets/co2.csv">Download</a></td>
                 </tr>
                 </tbody>
               </table>
@@ -128,12 +134,103 @@
       </div>
     </div>
   </section>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLabel">Accepted csv formats</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Input should be a csv file. <br>
+            Dates should be <span class="font-weight-bold">YYYY-MM-DD</span>.</p>
+          <p><span class="font-weight-bold">Option 1 :</span> one row per date (ordered) and one column per contender</p>
+          <table class="table">
+            <thead class="thead-light">
+            <tr>
+              <th>Date</th>
+              <th>Name1</th>
+              <th>Name2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>2018-01-01</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>2018-02-01</td>
+              <td>2</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>2018-03-01</td>
+              <td>4</td>
+              <td>7</td>
+            </tr>
+            </tbody>
+          </table>
+          <p><span class="font-weight-bold">Option 2 :</span> one row per contender and per date</p>
+          <table class="table">
+            <thead class="thead-light">
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>2018-01-01</td>
+              <td>Name1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>2018-01-01</td>
+              <td>Name2</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>2018-02-01</td>
+              <td>Name1</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>2018-02-01</td>
+              <td>Name2</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>2018-03-01</td>
+              <td>Name1</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>2018-03-01</td>
+              <td>Name2</td>
+              <td>7</td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="js/barchartrace.js"></script>
 <script>
     const app = new Vue({
@@ -215,7 +312,7 @@
 
                 self.errors = [];
 
-                if (!self.file) {
+                if (!self.csv_data) {
                     self.errors.push('csv file is required');
                 }
                 if (!self.tickDuration) {
@@ -224,8 +321,8 @@
                 if (!self.top_n) {
                     self.errors.push('Number of bars to display required.');
                 }
-
                 e.preventDefault();
+                window.scrollTo({top:document.body.scrollHeight, behavior: 'smooth'});
             }
         },
         delimiters: ["((", "))"]
@@ -267,7 +364,7 @@
         "co2": {
             "duration": 30,
             "top_n": 10,
-            "title": "CO2 Emissions from Fossil Fuels per capita, between 1950 and 2014",
+            "title": "CO2 Emissions from Fossil Fuels per capita, between 1950 and 2014 (in metric tons)",
             "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv"
         }
     }
