@@ -274,11 +274,11 @@ function createBarChartRace(data, top_n, tickDuration) {
     // loop
     let i = 1;
     let interval = d3.interval((e) => {
-        [time, row_data] = getRowData(data, column_names, i)
-        drawGraph()
+        [time, row_data] = getRowData(data, column_names, i);
+        drawGraph();
         // increment loop
         i += 1
-        if (i == data.length - 1) interval.stop()
+        if (i == data.length) interval.stop()
 
 
     }, tickDuration)
