@@ -1,19 +1,17 @@
 function createBarChartRace(data, top_n, tickDuration) {
     var data = data;
     let chartDiv = document.getElementById("chartDiv");
-    chartDiv.textContent = ''
+    chartDiv.textContent = '';
     let width = chartDiv.clientWidth;
     let height = chartDiv.clientHeight - 50;
-    console.log('width', width);
-    console.log('height', height);
 
     let svg = d3.select(chartDiv).append("svg")
         .attr("width", width)
-        .attr("height", height)
+        .attr("height", height);
 
     let timeline_svg = d3.select(chartDiv).append("svg")
         .attr("width", width)
-        .attr("height", 50)
+        .attr("height", 50);
 
     const margin = {
         top: 20,
@@ -21,6 +19,8 @@ function createBarChartRace(data, top_n, tickDuration) {
         bottom: 0,
         left: 0
     };
+
+    const marginTimeAxis = 30;
 
     let barPadding = (height - (margin.bottom + margin.top)) / (top_n * 5);
 
@@ -59,18 +59,19 @@ function createBarChartRace(data, top_n, tickDuration) {
     });
 
     // draw the first frame
+
     [time, row_data] = getRowData(data, column_names, 0);
 
-    start_date = d3.min(data, d => d[time_index])
-    end_date = d3.max(data, d => d[time_index])
+    start_date = d3.min(data, d => d[time_index]);
+    end_date = d3.max(data, d => d[time_index]);
 
     let t = d3.scaleTime()
         .domain([start_date, end_date])
-        .range([margin.left+30, width - margin.right]);
+        .range([margin.left + marginTimeAxis, width - margin.right]);
 
     let timeAxis = d3.axisBottom()
         .ticks(5)
-        .scale(t)
+        .scale(t);
 
     let x = d3.scaleLinear()
         .domain([0, d3.max(row_data, d => d.value)])
@@ -104,7 +105,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('width', d => x(d.value) - x(0))
         .attr('y', d => y(d.rank) + barPadding / 2)
         .attr('height', y(1) - y(0) - barPadding)
-        .style('fill', d => colors[d.name])
+        .style('fill', d => colors[d.name]);
 
 
     svg.selectAll('text.label')
@@ -135,12 +136,12 @@ function createBarChartRace(data, top_n, tickDuration) {
 
     timeline_svg.append('g')
         .attr('class', 'axis tAxis')
-        .attr('transform', `translate(10, 20)`)
+        .attr('transform', `translate(0, 20)`)
         .call(timeAxis);
 
     timeline_svg.append('rect')
         .attr('class', 'progressBar')
-        .attr('transform', `translate(10, 20)`)
+        .attr('transform', `translate(${marginTimeAxis}, 20)`)
         .attr('height', 2)
         .attr('width', 0);
 
@@ -151,8 +152,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         .style('text-anchor', 'end')
         .html(d3.timeFormat("%B %d, %Y")(time));
 
-    // drawGraph()
-
+    // draw the updated graph with transitions
     function drawGraph() {
         // update xAxis with new domain
         x.domain([0, d3.max(row_data, d => d.value)]);
@@ -190,7 +190,7 @@ function createBarChartRace(data, top_n, tickDuration) {
             .ease(d3.easeLinear)
             .attr('width', d => x(d.value) - x(0))
             .attr('y', d => y(top_n + 1) + barPadding / 2)
-            .remove()
+            .remove();
 
         // update labels
         let labels = svg.selectAll('.label').data(row_data, d => d.name);
@@ -262,7 +262,7 @@ function createBarChartRace(data, top_n, tickDuration) {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('width', t(time))
+            .attr('width', t(time) - marginTimeAxis)
         // .on('end', () => {
         //     d3.select('.timeText').html(d3.timeFormat("%B %d, %Y")(time))
         // timeText.html(d3.timeFormat("%B %d, %Y")(time))
