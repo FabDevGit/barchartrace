@@ -54,7 +54,7 @@
                 <div v-if="errors.length">
                   <b>Please correct the following error(s):</b>
                   <ul>
-                    <li v-for="error in errors"></li>
+                    <li v-for="error in errors">(( error ))</li>
                   </ul>
                 </div>
                 <div class="form-group">
@@ -118,9 +118,9 @@
         </div>
       </div>
       <hr>
-      <div class="card">
+      <div id="chart-card" class="card">
         <div class="card-body position-relative">
-          <div class="text-right">
+          <div class="text-right mb-4">
             <button type="button" class="btn btn-xs btn-outline-primary" v-on:click="stopRace">Stop</button>
             <button type="button" class="btn btn-xs btn-outline-primary" v-on:click="checkForm">Restart</button>
           </div>
@@ -254,7 +254,6 @@
                         header: true,
                         skipEmptyLines: true,
                         complete: function (results) {
-                            console.log(results);
                             if (Object.keys(results.data[0]).length === 3) {
                                 results.data = reshapeData(results.data)
                             }
@@ -276,7 +275,6 @@
                         }
                         self.csv_data = results.data;
                         self.top_n = Math.min(20, Object.keys(self.csv_data[0]).length - 1)
-                        console.log(self.top_n)
                     }
                 });
 
@@ -319,13 +317,18 @@
                     self.errors.push('Number of bars to display required.');
                 }
                 e.preventDefault();
-                window.scrollTo({top:document.body.scrollHeight, behavior: 'smooth'});
+                window.scrollTo({top: $("#chart-card").offset().top - 10, behavior: 'smooth'});
             }
         },
         delimiters: ["((", "))"]
 
     });
 
+
+    /*
+    reshapes the data from the second accepted csv format to the other :
+    (one row per contender and per date) => (one row per date (ordered) and one column per contender.)
+    */
     function reshapeData(data) {
         // groupby dates (first column)
         column_names = new Set(data.map(x => x[Object.keys(x)[1]]));
@@ -339,6 +342,7 @@
 
     }
 
+    // settings for the example data
     const settings = {
         "covid19": {
             "duration": 30,
